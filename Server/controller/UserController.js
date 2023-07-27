@@ -43,12 +43,15 @@ export const logInController = async (req, res) => {
     try {
         const { userName, userPassword } = req.body;
         const { error } = loginValidation.validate(req.body)
+        
         // find user in the database
         const userCredentials = await userSchemaModel.findOne({ userName });
 
         // Validate if the user is found or not
-        if (!userCredentials || !(await comparePassword(userPassword, userCredentials.userPassword))) {
-            res.status(400).json({ message: "Username and Password is incorrect" })
+        if (!userCredentials || !(await comparePassword(userPassword, userCredentials.userPassword)) || error) {
+            const errorMessage = error ? error.details[0].message : '';
+            const message = userCredentials ? `Username and Password is incorrect` : errorMessage;
+            res.status(400).json({ message: message })
         } else {
             // If login Successful
             console.log('Login Successful');
@@ -59,12 +62,17 @@ export const logInController = async (req, res) => {
                 userName: userSchemaModel.userName
             },process.env.JWT_SECRET)
             //Notice 
-            res.status(200).json({ message: "Login successful", token});
+           
+            res.status(200).json({ message: "Login successful", token: token, user: {
+                email: userCredentials.userEmail,
+                role: userCredentials.role,
+                fullname: userCredentials.fullName
+            }});
+        
         }
+    } catch ( error ) {
 
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Username and Password is incorrect" });
     }
 }
 //Edit User
