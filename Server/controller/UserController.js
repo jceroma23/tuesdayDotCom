@@ -7,13 +7,12 @@ import { userValidation, isExistingUser, loginValidation } from "../utils/userVa
 // Add new User
  export const signUpController = async (req, res) => {
     try {
-        const { userName, userPassword, userEmail } = req.body;
-        
+        const { userName, userEmail, userPassword } = req.body;
         // Validate Using Joi
         const { error } = userValidation.validate(req.body) 
         
         //Check if isEXistingUser
-        const existingUser = await isExistingUser(userEmail, userName );
+        const existingUser = await isExistingUser(userEmail, userName);
 
         //If this statement is true it will return a Error.
         if (existingUser || error ) {
@@ -31,7 +30,13 @@ import { userValidation, isExistingUser, loginValidation } from "../utils/userVa
             userPassword: hashedPassword,
         })
         delete userRegister.userPassword;
-        res.status(200).json({ message: "Register Successful"})
+
+        const token = jwt.sign({
+            userId: userRegister._id,
+            userName: userRegister.userName
+        },process.env.JWT_SECRET)
+
+        res.status(200).json({ message: "Register Successful", token: token});
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -48,18 +53,18 @@ export const logInController = async (req, res) => {
         const userCredentials = await userSchemaModel.findOne({ userName });
 
         // Validate if the user is found or not
-        if (!userCredentials || !(await comparePassword(userPassword, userCredentials.userPassword)) || error) {
+        if (!userCredentials || !(await comparePassword(userPassword, userCredentials.userPassword))) {
             const errorMessage = error ? error.details[0].message : '';
-            const message = userCredentials ? `Username and Password is incorrect` : errorMessage;
-            res.status(400).json({ message: message })
+            const message = !userCredentials || !(await comparePassword(userPassword, userCredentials.userPassword)) ? 'Username and Password is incorrect' : errorMessage;
+         res.status(400).json({ message: message })
         } else {
             // If login Successful
             console.log('Login Successful');
             delete userCredentials.userPassword;
             // Create session token
             const token = jwt.sign({
-                userId: userSchemaModel._id,
-                userName: userSchemaModel.userName
+                userId: userCredentials._id,
+                userName: userCredentials.userName
             },process.env.JWT_SECRET)
             //Notice 
            
@@ -71,8 +76,7 @@ export const logInController = async (req, res) => {
         
         }
     } catch ( error ) {
-
-        res.status(500).json({ message: "Username and Password is incorrect" });
+        res.status(500).json({ message: "Internal Server Error", error });
     }
 }
 //Edit User

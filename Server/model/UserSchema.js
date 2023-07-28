@@ -11,14 +11,14 @@ const userSchema = new mongoose.Schema({
     userEmail: {
         type: String,
         require: true,
-        min: 3,
+        min: 5,
         max: 50,
         // unique: true, Need to change this once Deployed
     },
     userPassword: {
         type: String,
         required: true,
-        min: 8,
+        min: 5,
         max: 50,
     },
     fullName: {

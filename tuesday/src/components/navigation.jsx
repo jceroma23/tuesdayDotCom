@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
-const Navigation = ({ handleLogInModal, handleRegistrationModal }) => {
-    
+const Navigation = () => {
 
   return (
     <nav className="flex items-center justify-between flex-wrap p-2 fixed-top bg-white shadow-sm">
@@ -19,16 +18,17 @@ const Navigation = ({ handleLogInModal, handleRegistrationModal }) => {
         </div>
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
             <div className="text-sm lg:flex-grow">
-               <Link className='text-black p-2.5 px-10 rounded-md text-lg hover:bg-amber-100' to="/">HOME
+               <Link className='text-black p-2.5 px-10 rounded-md text-lg hover:bg-amber-100' to="/">Home
                <HomeRoundedIcon className='text-yellow-600 mb-1.5 ml-1'/>
                </Link>
-               <Link className='text-black p-2.5 px-10 rounded-md text-lg hover:bg-amber-100 mx-2' to="/">TASK
+               <Link className='text-black p-2.5 px-10 rounded-md text-lg hover:bg-amber-100 mx-2' to="/">Task
                <KeyboardArrowDownRoundedIcon className='text-yellow-600 mb-1.5 ml-1'/>
                </Link>
             </div>
             <div>
-                <Link onClick={handleLogInModal} className="inline-block  px-10 py-3 leading-none rounded-md hover:border-transparent text-lg hover:bg-amber-100  font-normal  lg:mt-0 ">LogIn</Link>
-                <Link onClick={handleRegistrationModal} className="inline-block  px-10 py-3 leading-none border rounded-md text-amber-900 border-white hover:border-transparent text-lg hover:text-amber-950 bg-amber-200 font-bold  lg:mt-0 ">Sign up</Link>
+
+                {/* Any Button that is required */}
+
             </div>
         </div>
     </nav>

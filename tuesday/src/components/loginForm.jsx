@@ -3,11 +3,15 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useDispatch } from "react-redux"
 import { login } from '../features/user'
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import { loginRoute } from '../utils/APIroutes';
+import { useNavigate } from 'react-router-dom';
+import { closeLoading, openLoading } from '../features/loading';
+import { toast } from 'react-toastify';
+
 
 const LoginForm = ({ handleLogInModalClose, loginModal}) => {
   const disptach = useDispatch()
+  const navigate = useNavigate()
   const [ errorText, seterrorText ] = useState("");
   const [ values, setValues ] = useState({
     userName:"",
@@ -19,37 +23,66 @@ const LoginForm = ({ handleLogInModalClose, loginModal}) => {
   }
 
 // Create Validation Form for FrontEnd
+const validateForm = () => {
+  const { username, password } = values;
+  if (username === "") {
+    toast.error("Username and Password is required.");
+    return false;
+  } else if (password === "") {
+    toast.error("Username and Password is required.");
+    return false;
+  }
+  return true;
+};
 
+// This will handle Submit from Form
   const handleSubmit = async (event) => {
     event.preventDefault();
    try {
-    const { userName, userPassword } = values;
-    const { data } = await axios.post(loginRoute, {
-      userName,
-      userPassword
-    });
-    if (!data) {
-      seterrorText('Login not successful')
+    if (validateForm()) {
+      disptach(openLoading())
+      const { userName, userPassword } = values;
+      const { data } = await axios.post(loginRoute, {
+        userName,
+        userPassword
+      });
+      // Check if data is undefined or notfound
+        if (!data) {
+          toast.error("Login not successful");
+          navigate("/")
+        } else {
+          const userData = data.user;
+          console.log(userData);
+          // Set a loader for login
+          toast.success("Login successful");
+          // Apply redux here
+          disptach(login({
+            name: userData.fullName,
+            email: userData.email,
+            role: userData.role
+          }))
+          // Set time for closing the loading page
+          setTimeout(() => {
+            disptach(closeLoading())
+            navigate("/home")
+          }, 5000)
+      }
     }
-    const userData = data.user;
-    console.log(userData);
-
-    // Set a loader for login
-    seterrorText('Login successful')
-
-    // Apply redux here
-    disptach(login({
-      name: userData.fullName,
-      email: userData.email,
-      role: userData.role
-    }))
-
+    
    } catch (error) {
     const { message } = error.response.data;
-    seterrorText(message)
+    toast.error(message);
    }
   }
 
+// Toast Option/Settings
+// const toastOptions = {
+//   position: "top-left",
+//   autoClose: 3000,
+//   pauseOnHover: true,
+//   draggable: true,
+//   theme: "dark",
+// };
   return (
     <Transition appear show={loginModal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={handleLogInModalClose}>
@@ -64,7 +97,6 @@ const LoginForm = ({ handleLogInModalClose, loginModal}) => {
           >
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
-
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
@@ -85,8 +117,9 @@ const LoginForm = ({ handleLogInModalClose, loginModal}) => {
                     >
                         Log in to your account
                     </Dialog.Title>
-
+                    {/* <ToastContainer /> */}
                       <form onSubmit={(event)=>handleSubmit(event)} >
+                     
                         <div className='mb-6'>
                             <label htmlFor="userName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
                             <input type="text" id="userName" name='userName' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter your Username here"
@@ -121,11 +154,9 @@ const LoginForm = ({ handleLogInModalClose, loginModal}) => {
                             Cancel
                             </button>
                         </div>
-                      </form>
-                      
-                      
+                      </form> 
                     </Dialog.Panel>
-                
+                    
               </Transition.Child>
             </div>
           </div>

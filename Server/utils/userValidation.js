@@ -9,8 +9,8 @@ const userValidation = Joi.object({
 });
 
 const loginValidation = Joi.object({
-    userName: Joi.string().alphanum().min(3).max(25).trim(true).required(),
-    userPassword: Joi.string().min(8).trim(true).required()
+    userName: Joi.string().alphanum().min(5).max(25).trim(true).required(),
+    userPassword: Joi.string().min(5).trim(true).required()
 });
 
 const isExistingUser = async ( inputUserEmail, inputUserName ) => {
