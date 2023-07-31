@@ -26,6 +26,7 @@ function App() {
       pauseOnHover
       theme="dark"
     />
+    
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage/>}/>
