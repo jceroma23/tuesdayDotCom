@@ -3,6 +3,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotEnv from "dotenv";
 import { userRouter } from "./router/UserRouter.js";
+import { projectBoardRouter } from "./router/ProjectBoardRouter.js";
+import { invitationRouter } from "./router/invitationRouter.js";
+
+
 
 const app = express();
 mongoose.Promise = global.Promise;
@@ -21,7 +25,8 @@ app.use(cors({
 
 //Routers
 app.use('/api/auth', userRouter);
-
+app.use('/api/auth', projectBoardRouter);
+app.use('/api/auth', invitationRouter);
 
 // Connection to DATABASE and LOCAL PORT
 mongoose.connect(process.env.DB_CONNECT, {

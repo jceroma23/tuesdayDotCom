@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+const Schema = mongoose.Schema;
+import invitationProjectBoard from "./invitationSchema.js";
 const userSchema = new mongoose.Schema({
     userName: {
         type: String,
@@ -27,27 +28,18 @@ const userSchema = new mongoose.Schema({
         min: 8,
         max: 50,
     },
-    role: {
-        type: String,
-        required: true,
-        default: 'User',
-    },
-    sesionHistory: [{
-        device: {
-            type: String,
+    projects: [{
+        ownedProjectsBoard: {
+            type: Schema.Types.ObjectId,
+            ref: 'projectBoard'
         },
-        location: {
-            type: String,
-        },
-        lastUsage: {
-            type: Date,
-        },
-    }], //This is an array for session history 
-    createdAt: { 
-        type: Date, 
-        default: Date.now 
-    },
-})
+        acceptedProjectsBoard: {
+            type: Schema.Types.ObjectId,
+            ref: 'invitationProject'
+        }
+    }],
+    
+}, {timestamps: true})
 
 const userSchemaModel = mongoose.model('userSchemaModel', userSchema);
 export default userSchemaModel;

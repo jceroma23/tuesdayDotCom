@@ -79,7 +79,9 @@ export const logInController = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error });
     }
 }
+
 //Edit User
+// Needs validation
 export const editUserCredentials = async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -91,7 +93,6 @@ export const editUserCredentials = async (req, res) => {
         } else {
             res.status(201).json({ message: "Update Successul" });
         };
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
@@ -117,5 +118,15 @@ export const deleteUserById = async (req, res) => {
     }
 }
 
+// Project of User
+// Get ProjectBoard Details by UserId
+export const getAllUserProjectBoards = async(res, req) => {
+    try {
+        const userParams = req.params.id
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
 
 
