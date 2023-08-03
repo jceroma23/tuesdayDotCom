@@ -5,6 +5,7 @@ import dotEnv from "dotenv";
 import { userRouter } from "./router/UserRouter.js";
 import { projectBoardRouter } from "./router/ProjectBoardRouter.js";
 import { invitationRouter } from "./router/invitationRouter.js";
+import { taskRouter } from "./router/taskRouter.js";
 
 
 
@@ -27,6 +28,7 @@ app.use(cors({
 app.use('/api/auth', userRouter);
 app.use('/api/auth', projectBoardRouter);
 app.use('/api/auth', invitationRouter);
+app.use('/api/auth', taskRouter);
 
 // Connection to DATABASE and LOCAL PORT
 mongoose.connect(process.env.DB_CONNECT, {

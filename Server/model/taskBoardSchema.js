@@ -7,6 +7,10 @@ const taskBoardSchemaModel = new mongoose.Schema({
         required: true,
         default: 'Task Name'
     },
+    taskBoardDetails: {
+        type: String,
+        required: false,
+    },
     taskBoardSubItem : [{
         taskSub: {
             type: Schema.Types.ObjectId,        //Array of task Sub Item with Columns

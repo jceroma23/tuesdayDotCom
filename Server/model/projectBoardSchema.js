@@ -39,7 +39,7 @@ const projectBoardSchemaModel = new mongoose.Schema({
           enum: ['read', 'write', 'admin'], // Define possible access levels
         },
     }],
-    taskBoard: [{
+    taskBoards: [{
         taskBoard: {
         type: Schema.Types.ObjectId,        // Reference to the TaskBoard ObjectId
         required: false,
@@ -47,6 +47,8 @@ const projectBoardSchemaModel = new mongoose.Schema({
      }
     }]
 }, {timestamps: true})
+
+
 
 const projectBoardSchema = mongoose.model('projectBoard', projectBoardSchemaModel)
 export default projectBoardSchema;

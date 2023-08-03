@@ -34,8 +34,6 @@ export const addProjectBoard = async(req, res) => {
 
 
 
-
-
 // Edit Board Projects overall
 export const editProjectBoard = async(req, res) => {
     try {

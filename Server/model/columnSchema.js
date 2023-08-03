@@ -1,10 +1,17 @@
-import mongoose from "mongoose";
+import { date } from "joi";
+import mongoose, { now } from "mongoose";
 const Schema = mongoose.Schema;
+
+const getThreeDaysFromNow = () => {
+    const now = new Date();
+    now.setDate(now.getDate() + 3); // Add three days to the current date
+    return now;
+  }
 
 const columnSchemaModel = new mongoose.Schema({
     columnTitle: {
         type: String,
-        required: true
+        required: true,
     },
     people:[{
         type: Schema.Types.ObjectId,
@@ -13,39 +20,41 @@ const columnSchemaModel = new mongoose.Schema({
     }],
     taskStatus: {
         type: String,
-        required: true
+        required: false
     },
     taskDueDate: {
         type: Date,
-        required: true
+        required: true,
+        default: getThreeDaysFromNow
     },
     taskTimeLine: [{
         startDate: {
             type: String,
-            required: false
+            required: false,
+            default: now
         },
         endDate: {
             type: String,
-            required: false
+            required: false,
+            default: getThreeDaysFromNow
         }
     }],
     taskPriority: {
         type: String,
-        required: true
+        required: false,
+        default: 'Low',
+        enum: ['Low', 'Medium', 'High', 'Critical']
     },
     taskBudget: {
         type: Number,
-        required: true
-    },
-    taskTimeline: {
-        type: String,
-        required: true
-    },
-    columnTitle: {
-        type: String,
-        required: true
+        required: true,
+        default: 100
     },
 })
+
+columnSchemaModel.virtual('formattedTaskBudget').get(function () {
+    return this.taskBudget.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+});
 
 const columnSchema = mongoose.model('column', columnSchemaModel);
 export default columnSchema

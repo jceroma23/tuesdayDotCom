@@ -7,7 +7,6 @@ const Schema = mongoose.Schema;
 // using this method I can search for every recieved and sent by the said User
 
 const invitationProjectBoardSchemaModel = new mongoose.Schema({
-    invitationCards: [{
         sender: {
             type: Schema.Types.ObjectId,
             ref: 'userSchemaModel'
@@ -19,7 +18,7 @@ const invitationProjectBoardSchemaModel = new mongoose.Schema({
         invitationStatus: {
             type: String,
             default: 'pending',
-            enum: ['pending', 'accepted']
+            enum: ['pending', 'accepted', 'rejected']
         },
         access: {
             type: String,
@@ -30,7 +29,6 @@ const invitationProjectBoardSchemaModel = new mongoose.Schema({
             type: Schema.Types.ObjectId,
             ref: 'projectBoard'
         }
-    }],
 });
 
 const invitationProjectBoard = mongoose.model('invitationProject', invitationProjectBoardSchemaModel);

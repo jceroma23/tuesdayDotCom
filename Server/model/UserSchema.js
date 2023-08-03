@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
         },
         acceptedProjectsBoard: {
             type: Schema.Types.ObjectId,
-            ref: 'invitationProject'
+            ref: 'projectBoard'
         }
     }],
     

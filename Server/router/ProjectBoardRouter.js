@@ -3,6 +3,6 @@ import { Router } from "express";
 
 const projectBoardRouter = Router()
 
-projectBoardRouter.post('/:userId/addProject', addProjectBoard);
+projectBoardRouter.post('/addProject/:userId', addProjectBoard);
 
 export { projectBoardRouter };

@@ -48,7 +48,6 @@ export const logInController = async (req, res) => {
     try {
         const { userName, userPassword } = req.body;
         const { error } = loginValidation.validate(req.body)
-        
         // find user in the database
         const userCredentials = await userSchemaModel.findOne({ userName });
 
@@ -66,14 +65,12 @@ export const logInController = async (req, res) => {
                 userId: userCredentials._id,
                 userName: userCredentials.userName
             },process.env.JWT_SECRET)
-            //Notice 
-           
+            //Notice  
             res.status(200).json({ message: "Login successful", token: token, user: {
                 email: userCredentials.userEmail,
                 role: userCredentials.role,
                 fullname: userCredentials.fullName
             }});
-        
         }
     } catch ( error ) {
         res.status(500).json({ message: "Internal Server Error", error });
@@ -120,9 +117,17 @@ export const deleteUserById = async (req, res) => {
 
 // Project of User
 // Get ProjectBoard Details by UserId
-export const getAllUserProjectBoards = async(res, req) => {
+// getAllProjects for login User
+export const getUserProject = async(req, res) => {
     try {
-        const userParams = req.params.id
+        const userId = req.params.userId
+        const getUserDetails = await userSchemaModel
+        .findById(userId)
+        .populate('projects.ownedProjectsBoard', 'boardName')
+        .populate('projects.acceptedProjectsBoard', 'boardName')
+
+        console.log(getUserDetails);
+        res.status(200).json({ message: "Successful", getUserDetails });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
