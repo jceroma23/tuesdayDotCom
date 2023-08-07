@@ -65,6 +65,7 @@ export const logInController = async (req, res) => {
                 userId: userCredentials._id,
                 userName: userCredentials.userName
             },process.env.JWT_SECRET)
+            
             //Notice  
             res.status(200).json({ message: "Login successful", token: token, user: {
                 email: userCredentials.userEmail,

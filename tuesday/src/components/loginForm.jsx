@@ -7,11 +7,13 @@ import { loginRoute } from '../utils/APIroutes';
 import { useNavigate } from 'react-router-dom';
 import { closeLoading, openLoading } from '../features/loading';
 import { toast } from 'react-toastify';
+import { useSignIn } from 'react-auth-kit';
 
 
 const LoginForm = ({ handleLogInModalClose, loginModal}) => {
   const disptach = useDispatch()
   const navigate = useNavigate()
+  const signIn = useSignIn()
   const [ errorText, seterrorText ] = useState("");
   const [ values, setValues ] = useState({
     userName:"",
@@ -61,6 +63,16 @@ const validateForm = () => {
             email: userData.email,
             role: userData.role
           }))
+           
+          signIn({
+                token: data.token,
+                expiresIn: 3600,
+                tokenType: "Bearer",
+                authState: { userName: values.userName},
+            })
+
+
+
           // Set time for closing the loading page
           setTimeout(() => {
             disptach(closeLoading())
@@ -68,7 +80,6 @@ const validateForm = () => {
           }, 5000)
       }
     }
-    
    } catch (error) {
     const { message } = error.response.data;
     toast.error(message);

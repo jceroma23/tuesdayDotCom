@@ -1,4 +1,3 @@
-import { date } from "joi";
 import mongoose, { now } from "mongoose";
 const Schema = mongoose.Schema;
 
@@ -18,7 +17,7 @@ const columnSchemaModel = new mongoose.Schema({
         ref: 'userSchemaModel',
         required: false,
     }],
-    taskStatus: {
+    taskStatus:{
         type: String,
         required: false
     },
@@ -27,7 +26,7 @@ const columnSchemaModel = new mongoose.Schema({
         required: true,
         default: getThreeDaysFromNow
     },
-    taskTimeLine: [{
+    taskTimeLine: {
         startDate: {
             type: String,
             required: false,
@@ -38,7 +37,7 @@ const columnSchemaModel = new mongoose.Schema({
             required: false,
             default: getThreeDaysFromNow
         }
-    }],
+    },
     taskPriority: {
         type: String,
         required: false,
@@ -49,6 +48,10 @@ const columnSchemaModel = new mongoose.Schema({
         type: Number,
         required: true,
         default: 100
+    },
+    messageBoard: {
+        type: Schema.Types.ObjectId,        //Array of task Sub Item with Columns
+        ref: 'messageBoard'
     },
 })
 

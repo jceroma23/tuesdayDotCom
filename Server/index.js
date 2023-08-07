@@ -6,6 +6,7 @@ import { userRouter } from "./router/UserRouter.js";
 import { projectBoardRouter } from "./router/ProjectBoardRouter.js";
 import { invitationRouter } from "./router/invitationRouter.js";
 import { taskRouter } from "./router/taskRouter.js";
+import { columnRouter } from "./router/columnRouter.js";
 
 
 
@@ -29,7 +30,7 @@ app.use('/api/auth', userRouter);
 app.use('/api/auth', projectBoardRouter);
 app.use('/api/auth', invitationRouter);
 app.use('/api/auth', taskRouter);
-
+app.use('/api/auth', columnRouter);
 // Connection to DATABASE and LOCAL PORT
 mongoose.connect(process.env.DB_CONNECT, {
     useNewUrlParser: true,
