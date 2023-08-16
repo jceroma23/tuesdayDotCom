@@ -28,6 +28,12 @@ const userSchema = new mongoose.Schema({
         min: 8,
         max: 50,
     },
+    role: {
+        type: String,
+        required: false,
+        default:'Freelancer',
+        enum: ['Freelancer', 'Employee', 'Owner']
+    },
     projects: [{
         ownedProjectsBoard: {
             type: Schema.Types.ObjectId,

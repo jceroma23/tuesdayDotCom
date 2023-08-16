@@ -61,13 +61,17 @@ export const logInController = async (req, res) => {
             console.log('Login Successful');
             delete userCredentials.userPassword;
             // Create session token
+
             const token = jwt.sign({
                 userId: userCredentials._id,
-                userName: userCredentials.userName
-            },process.env.JWT_SECRET)
-            
+                userName: userCredentials.userName,
+            }, process.env.JWT_SECRET)
+
+            console.log(userCredentials)
             //Notice  
             res.status(200).json({ message: "Login successful", token: token, user: {
+                userId: userCredentials._id,
+                userName: userCredentials.userName,
                 email: userCredentials.userEmail,
                 role: userCredentials.role,
                 fullname: userCredentials.fullName
@@ -116,23 +120,6 @@ export const deleteUserById = async (req, res) => {
     }
 }
 
-// Project of User
-// Get ProjectBoard Details by UserId
-// getAllProjects for login User
-export const getUserProject = async(req, res) => {
-    try {
-        const userId = req.params.userId
-        const getUserDetails = await userSchemaModel
-        .findById(userId)
-        .populate('projects.ownedProjectsBoard', 'boardName')
-        .populate('projects.acceptedProjectsBoard', 'boardName')
 
-        console.log(getUserDetails);
-        res.status(200).json({ message: "Successful", getUserDetails });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-}
 
 

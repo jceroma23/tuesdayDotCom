@@ -1,6 +1,5 @@
 import userSchemaModel from "../model/UserSchema.js";
 import projectBoardSchema from "../model/projectBoardSchema.js";
-;
 
 // Add Board Projects, Also update the userAccount that add the projects.
 // Add Projects with User ID
@@ -32,6 +31,24 @@ export const addProjectBoard = async(req, res) => {
     }
 }
 
+// Project of User
+// Get ProjectBoard Details by UserId
+// getAllProjects for login User
+export const getUserProject = async(req, res) => {
+    try {
+        const userId = req.params.userId
+        const getUserProjectDetail = await userSchemaModel
+        .findById(userId)
+        .populate('projects.ownedProjectsBoard')
+        .populate('projects.acceptedProjectsBoard')
+        .select('projects.ownedProjectsBoard projects.acceptedProjectsBoard');
+        res.status(200).json({ message: "Successful", getUserProjectDetail: getUserProjectDetail  });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
 
 
 // Edit Board Projects overall
@@ -43,3 +60,4 @@ export const editProjectBoard = async(req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+
