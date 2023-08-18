@@ -60,15 +60,13 @@ export const logInController = async (req, res) => {
             // If login Successful
             console.log('Login Successful');
             delete userCredentials.userPassword;
+            
             // Create session token
-
             const token = jwt.sign({
                 userId: userCredentials._id,
                 userName: userCredentials.userName,
             }, process.env.JWT_SECRET)
 
-            console.log(userCredentials)
-            //Notice  
             res.status(200).json({ message: "Login successful", token: token, user: {
                 userId: userCredentials._id,
                 userName: userCredentials.userName,

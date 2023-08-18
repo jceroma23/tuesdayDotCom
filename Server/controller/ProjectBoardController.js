@@ -23,6 +23,7 @@ export const addProjectBoard = async(req, res) => {
         }, {new: true})
         .populate('projects.ownedProjectsBoard', 'boardName description')
         .populate('projects.acceptedProjectsBoard', 'boardName description')
+        
         console.log('Successfully Added Owned Project')
         res.status(200).json({ message: "Board Creation Successful", newProjectBoard, addProjecttoUser });
     } catch (error) {
@@ -41,6 +42,20 @@ export const getUserProject = async(req, res) => {
         .findById(userId)
         .populate('projects.ownedProjectsBoard')
         .populate('projects.acceptedProjectsBoard')
+        .populate({
+            path: 'projects.ownedProjectsBoard',
+            populate: {
+                path: 'createdBy', // Assuming createdBy is a reference to userSchemaModel
+                select: 'userName', // Select the userName field
+            }
+            })
+        .populate({
+            path: 'projects.acceptedProjectsBoard',
+            populate: {
+                path: 'createdBy', // Assuming createdBy is a reference to userSchemaModel
+                select: 'userName', // Select the userName field
+            }
+            })
         .select('projects.ownedProjectsBoard projects.acceptedProjectsBoard');
         res.status(200).json({ message: "Successful", getUserProjectDetail: getUserProjectDetail  });
         
@@ -55,6 +70,15 @@ export const getUserProject = async(req, res) => {
 export const editProjectBoard = async(req, res) => {
     try {
         // Codes here for edit
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const searchProject = async(req, res) => {
+    try {
+        // Code for Search Here
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });
