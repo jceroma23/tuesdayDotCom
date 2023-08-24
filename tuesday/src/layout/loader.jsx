@@ -8,7 +8,7 @@ const Loader = () => {
   const isloaderPage = useSelector((state) => state.loader.isLoading)
 
   return (
-    <div className='flex justify-center items-center h-screen'>
+    <div className='flex justify-center items-center h- w-full'>
         <div>
           <h1 className='text-xl text-emerald-800'>Loading Please wait</h1>
             <div className='flex justify-center w-full mt-3'>
