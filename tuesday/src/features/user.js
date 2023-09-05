@@ -6,7 +6,7 @@ export const userSlice = createSlice({
     // Name of the state
     name:"user",
     // Value of the State
-    initialState: {value: { name:"", email:"", role:"", userId:"", userName:"", isLogin:false } },
+    initialState: {value: { name:"", email:"", role:"", userId:"", userName:"", fullName: "", isLogin:false } },
     // Function of the State where we can change the values
     reducers: {
         login: (state, action) => {

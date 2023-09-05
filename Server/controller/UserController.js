@@ -7,10 +7,10 @@ import { userValidation, isExistingUser, loginValidation } from "../utils/userVa
 // Add new User
  export const signUpController = async (req, res) => {
     try {
-        const { userName, userEmail, userPassword } = req.body;
+        const { fullName, userName, userEmail, userPassword, title } = req.body;
+        console.log(req.body)
         // Validate Using Joi
         const { error } = userValidation.validate(req.body) 
-        
         //Check if isEXistingUser
         const existingUser = await isExistingUser(userEmail, userName);
 
@@ -18,28 +18,29 @@ import { userValidation, isExistingUser, loginValidation } from "../utils/userVa
         if (existingUser || error ) {
             const errorMessage = error ? error.details[0].message : '';
             const message = existingUser ? `A user with this ${existingUser} already exist` : errorMessage;
-            return res.status(400).json({ message });
+            return res.status(500).json({ message });
         }
         //if validation is okay. will continue to register
         //Hashing the Password for Securites
         const hashedPassword = await securePassword(userPassword);
         //query to add data in database
         const userRegister = await userSchemaModel.create({
+            fullName,
             userName,
             userEmail,
             userPassword: hashedPassword,
+            title,
         })
         delete userRegister.userPassword;
-
         const token = jwt.sign({
             userId: userRegister._id,
-            userName: userRegister.userName
+            userName: userRegister.userName,
+            fullName: userRegister.fullName,
         },process.env.JWT_SECRET)
 
         res.status(200).json({ message: "Register Successful", token: token});
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error", error });
     }
  }
 
@@ -65,15 +66,10 @@ export const logInController = async (req, res) => {
             const token = jwt.sign({
                 userId: userCredentials._id,
                 userName: userCredentials.userName,
+                fullName: userCredentials.fullName,
             }, process.env.JWT_SECRET)
 
-            res.status(200).json({ message: "Login successful", token: token, user: {
-                userId: userCredentials._id,
-                userName: userCredentials.userName,
-                email: userCredentials.userEmail,
-                role: userCredentials.role,
-                fullname: userCredentials.fullName
-            }});
+            res.status(200).json({ message: "Login successful", token: token});
         }
     } catch ( error ) {
         res.status(500).json({ message: "Internal Server Error", error });
@@ -90,9 +86,9 @@ export const editUserCredentials = async (req, res) => {
 
         if (!updateInfo) {
             res.status(400).json({ message: "Update Failed Please try Again" });
-        } else {
-            res.status(201).json({ message: "Update Successul" });
         };
+        res.status(200).json({ message: "Update Successul" });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });

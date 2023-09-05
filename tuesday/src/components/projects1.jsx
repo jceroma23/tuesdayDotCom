@@ -8,12 +8,13 @@ import { Link } from 'react-router-dom';
 import projectPhoto from '../assets/projectspng.png';
 import acceptedProjectPhoto from '../assets/acceptedProject.jpg';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AddNewProject from '../components/addNewProject';
+
+import AddNewProject from './addNewProject';
 import { closeLoading, openLoading } from '../features/loading';
-import Loader from '../layout/loader';
+import Loader from './loader';
 
 
-const Projects = ({ setSelectedPage, setSelectedProjectData }) => {
+const Projects = ({ setSelectedPage }) => {
 
     // REDUX
     const disptach = useDispatch()
@@ -59,13 +60,7 @@ const handleCloseProjectModal = () => {
 // Instead of state use LocalStorage.
 // handle taskView
 const handleTaskView = (project) => {
-  disptach(openLoading())
-  setSelectedProjectData(project)
-  localStorage.setItem('project', project)
-  setTimeout(() => {
-    disptach(closeLoading())
-    setSelectedPage("taskView")
-  }, 2000)
+  console.log(project._id)
 }
 
 
@@ -76,6 +71,8 @@ return (
     ) : (
       <div className="p-1 sm:ml-10 w-full">
         <div className="p-4 border-2 border-skyblues-200 border-dashed rounded-lg dark:border-skyblues-700">
+
+        
           <nav className="mb-1">
             <div className="max-w-screen-xl px-4 py-3 mx-auto">
               <div className="flex items-center">
@@ -111,11 +108,14 @@ return (
               </div>
             </div>
           </nav>
+
+
           <hr className='mb-3'/>
+          {/* This is the Projects */}
           <div className='flex flex-wrap'>
             {projects.length > 0 ? (
               projects.map((project, index) => (
-                <Link onClick={() => handleTaskView(project.ownedProjectsBoard ? project.ownedProjectsBoard : project.acceptedProjectsBoard)} className='hover:box-border hover:shadow-lg hover:shadow-sky-700 transition duration-300 w-72 h-auto p-2 mb-5 mx-5 bg-white border border-skyblues-200 rounded-lg shadow dark:bg-skyblues-800 dark:border-skyblues-700' key={index}>
+                <Link className='hover:box-border hover:shadow-lg hover:shadow-sky-700 transition duration-300 w-72 h-auto p-2 mb-5 mx-5 bg-white border border-skyblues-200 rounded-lg shadow dark:bg-skyblues-800 dark:border-skyblues-700' key={index}>
                   {project.ownedProjectsBoard && (
                     <div className='flex items-center justify-center rounded bg-skyblues-50 dark:bg-skyblues-800 p-3'>
                       <div>

@@ -23,7 +23,7 @@ const projectBoardSchemaModel = new mongoose.Schema({
         required: false
     },
     members: [{
-        user: {
+        userId: {
           type: Schema.Types.ObjectId,
           ref: 'userSchemaModel',  // Reference to the user model for each permission entry
           required: false,

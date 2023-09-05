@@ -25,25 +25,15 @@ const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
         required: false,
-        min: 8,
+        min: 5,
         max: 50,
     },
-    role: {
+    title: {
         type: String,
         required: false,
-        default:'Freelancer',
-        enum: ['Freelancer', 'Employee', 'Owner']
-    },
-    projects: [{
-        ownedProjectsBoard: {
-            type: Schema.Types.ObjectId,
-            ref: 'projectBoard'
-        },
-        acceptedProjectsBoard: {
-            type: Schema.Types.ObjectId,
-            ref: 'projectBoard'
-        }
-    }],
+        // default:'Freelancer',
+        // enum: ['Freelancer', 'Employee', 'Business Owner']
+    }
     
 }, {timestamps: true})
 

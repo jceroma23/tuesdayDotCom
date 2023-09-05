@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import tuesdaylog from '../assets/Tuesdaycomlogo.png'
 import { Link } from 'react-router-dom'
 
@@ -6,10 +6,25 @@ import 'flowbite';
 import { useSelector } from 'react-redux';
 
 const Navigation = () => {
-    const user = useSelector((state) => state.user.value)
+    const user = useSelector((state) => state.user.value);
+
+    const getInitials = (fullName) => {
+        if (!fullName) {
+            return ''; // Return an empty string for no name
+        }
+        const nameParts = fullName.trim().split(' ');
+        return nameParts
+            .filter(part => typeof part === 'string' && part.length > 0) // Filter out non-string or empty parts
+            .map(part => part[0].toUpperCase()) // Safely access the first letter
+            .join('');
+    };
+    const fullName = user.fullName;
+    const initials = getInitials(fullName);
+
+    
+  
 
   return (
-   
     <nav className=" border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
@@ -44,7 +59,13 @@ const Navigation = () => {
 
                      {/* UserName */}
                      <li>
-                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" className="flex items-center justify-between w-full py-2 pl-3 pr-4  text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">{user.userName}
+                        <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" className="flex items-center justify-between w-full py-2 pl-3 pr-4  text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:border-gray-700 dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
+                        {/* PutName Here */}
+                        <div className='bg-sky-100 rounded-full px-2'>
+                        {initials}
+                        </div>
+                        
+
                         <svg className="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
                         </svg>
@@ -55,9 +76,7 @@ const Navigation = () => {
                             <li>
                                 <Link className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</Link>
                             </li>
-                            <li>
-                                <Link className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</Link>
-                            </li>
+                           
                             </ul>
                             <div className="py-1">
                             <Link className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">Sign out</Link>

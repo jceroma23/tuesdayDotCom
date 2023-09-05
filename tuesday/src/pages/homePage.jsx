@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
-import Navigation from "../layout/navigation";
-import Sidebar from '../layout/sideBar';
-import Projects from '../components/projects';
-import ProjectTask from '../components/projectTask';
+import Navigation from '../components/navigation';
+import Sidebar from "../components/sideBar";
+import ProjectCard from '../components/projectCard';
+
+// components
 
 
 const HomePage = () => {
@@ -17,17 +18,13 @@ const HomePage = () => {
   }, [selectedPage]);
 
   return (
-  <div className='min-h-screen'>
-    <Navigation/> 
-    
-    <div className='flex'>
-  {/* This is the Side Bar */}
-      <Sidebar setSelectedPage={setSelectedPage} /> 
-      { selectedPage === 'projectView' && <Projects setSelectedProjectData={setSelectedProjectData} setSelectedPage={setSelectedPage} />}
-      { selectedPage === 'taskView' && <ProjectTask seletedProjectData={seletedProjectData} /> }
-      
-    </div>
-  </div>
+  <>
+    <Navigation />
+      <div className="flex w-screen bg">
+        <Sidebar />
+        <ProjectCard />
+      </div>
+  </>
   )
 }
 

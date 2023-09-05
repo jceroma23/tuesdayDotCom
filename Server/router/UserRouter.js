@@ -6,7 +6,7 @@ const userRouter = Router()
 
 userRouter.post("/register", signUpController);
 userRouter.post("/login", logInController);
-userRouter.put("/user/:userId", editUserCredentials);
+userRouter.put("/userEdit/:userId", editUserCredentials);
 userRouter.delete("/user/delete/:userId", deleteUserById)
 
 export { userRouter };
